@@ -1,48 +1,69 @@
-#include <mlx.h>
-#include <math.h>
-#include <unistd.h>
+#include "include/fdf.h"
 
-typedef struct  s_data
+void    die(char *str)
 {
-    void    *img;
-    char    *addr;
-    int     bits_per_pixel;
-    int     line_length;
-    int     endian;
-}               t_data;
-
-void    my_mlx_pixel_put(t_data *data, int x, int y, int color)
-{
-    char    *dst;
-
-    dst = data->addr + (y * data->line_length + x * (data->bits_per_pixel / 8));
-    *(unsigned int*)dst = color;
+    ft_putendl_fd(str, 1);
+    exit(-1);
 }
 
-int main(void)
+int check_line(char *line, t_map *map)
 {
-    void    *mlx;
-    void    *win;
-    t_data  img;
+    char    **ret;
     int     i;
     int     i2;
+	int		prev_len;
 
     i = 0;
     i2 = 0;
-    mlx = mlx_init();
-    win = mlx_new_window(mlx, 400, 300, "FdF");
-    img.img = mlx_new_image(mlx, 200, 200);
-    img.addr = mlx_get_data_addr(img.img, &img.bits_per_pixel, &img.line_length, &img.endian);
-    while (i < 50)
+    ret = ft_split(line, ' ');
+	prev_len = ft_strlen(ret[i]);
+    while (ret[i] != NULL)
     {
-        while (i2 < 50)
-        {
-            my_mlx_pixel_put(&img, i, i2, 0x00FF0000);
-            i2++;
-        }
-        i2 = 0;
-        i++;
+        while (ret[i][i2] != '\0')
+    	{
+    		if (!ft_isdigit(ret[i][i2]) && ret[i][i2] != 43 && ret[i][i2] != 45 && ret[i][i2] != '\n')
+				die("File text error");
+			printf("%c\n", ret[i][i2]);
+			i2++;
+		}
+		i2 = 0;
+		map->coord[i] = ft_atoi(ret[i]);
+		i++;
     }
-    mlx_put_image_to_window(mlx, win, img.img, 0, 0);
-    mlx_loop(mlx);
+	return (1);
+}
+
+void    read_check_fill(char *file_name, t_map *map)
+{
+    int     fd;
+    int     ok;
+	int		i;
+    char    *line;
+
+	line = "a";
+    fd = open(file_name, O_RDONLY);
+	if (fd < 1)
+		die("Read file error");
+	i = 0;
+	while (line != 0)
+	{
+    	line = get_next_line(fd);
+    	ok = check_line(line, map);
+	}
+    
+}
+
+void    init_map(char *file_name, t_map *map)
+{
+    read_check_fill(file_name, map);
+}
+
+int main(int argc, char **argv)
+{
+    t_map   *map;
+
+	map = NULL;
+    if (argc != 2)
+        die("Usage: ./fdf [map_to_be_read]");
+    init_map(argv[1], map);
 }
