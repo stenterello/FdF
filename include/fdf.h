@@ -30,6 +30,10 @@ typedef struct s_fdf
     t_map   *map;
 }              t_fdf;
 
-
+void    die(char *str);
+void    init_map(char *file_name, t_map *map);
+void	checks(char *file_name, t_map *map);
+void	check_characters(char *line);
+void	one_by_one(char *line);
 
 #endif
