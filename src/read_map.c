@@ -46,7 +46,6 @@ static int	**get_matrix(char *file_name, t_fdf *fdf)
 	int		**matrix;
 	int		i;
 
-	i = 0;
 	fd = open(file_name, O_RDONLY);
 	if (fd == -1)
 		die ("Wrong file name.");
@@ -57,6 +56,7 @@ static int	**get_matrix(char *file_name, t_fdf *fdf)
 	matrix = (int **)malloc((fdf->matrix.rows + 1) * sizeof(int *));
 	if (!matrix)
 		return (NULL);
+	i = 0;
 	while (i < fdf->matrix.rows)
 	{
 		matrix[i] = (int *)malloc((fdf->matrix.cols + 1) * sizeof(int));

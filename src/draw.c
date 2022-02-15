@@ -36,8 +36,8 @@ void	bresenham(const float xy[2], float dst[2], t_fdf *fdf)
 	x = xy[0];
 	y = xy[1];
 	add_zoom(&x, &y, dst, fdf);
-	add_shift(&x, &y, dst, fdf);
 	isometric(&x, &y, dst, z);
+	add_shift(&x, &y, dst, fdf);
 	define_delta(&x, &y, dst, d_xy);
 	while (to_continue(d_xy, &x, &y, dst))
 	{
@@ -48,6 +48,14 @@ void	bresenham(const float xy[2], float dst[2], t_fdf *fdf)
 			|| y > fdf->win_height || y < 0)
 			break ;
 	}
+}
+
+static void	menu(t_fdf *fdf)
+{
+	fdf->menu.img = mlx_new_image(fdf->mlx, fdf->menu.width, fdf->menu.height);
+	fdf->menu.addr = mlx_get_data_addr(fdf->menu.img, &fdf->menu.bbp, &fdf->menu.len, &fdf->menu.end);
+	mlx_put_image_to_window(fdf->mlx, fdf->win, fdf->menu.img, 0, 0);
+	mlx_string_put(fdf->mlx, fdf->win, 20, 50, 0x00FFFFFF, "Move plan: WASD");
 }
 
 void	draw(t_fdf *fdf)
@@ -77,4 +85,5 @@ void	draw(t_fdf *fdf)
 		}
 		xy[1]++;
 	}
+	menu(fdf);
 }

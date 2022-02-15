@@ -6,13 +6,14 @@ SRCFLS= main.c \
 		read_map_utils.c \
 		win.c \
 		draw.c \
-		draw_utils.c
+		draw_utils.c \
+		events.c
 
 SRC = $(addprefix src/, $(SRCFLS))
 OBJS=$(SRC:.c=.o)
 
-$(NAME): $(LIBFT)
-	gcc $(FLAGS) -I /usr/local/include main.c init_map.c init_map_utils.c $(LIBFT) -L /usr/local/lib -lmlx -framework OpenGL -framework AppKit
+$(NAME): $(LIBFT) $(OBJS)
+	gcc $(FLAGS) $(OBJS) $(LIBFT) -I /usr/local/include -L /usr/local/lib -lmlx -framework OpenGL -framework AppKit -o $(NAME)
 
 all: $(NAME)
 
@@ -21,9 +22,6 @@ all: $(NAME)
 
 lin: $(LIBFT) $(OBJS)
 	gcc $(FLAGS) $(OBJS) $(LIBFT) ./mlx_linux/libmlx.a -Lmlx_linux -L/usr/lib -L/usr/include -Imlx_linux -lXext -lX11 -lm -lz -o $(NAME)
-
-
-# -lmlx_Linux
 
 $(LIBFT):
 	$(MAKE) bonus -C ../libft 

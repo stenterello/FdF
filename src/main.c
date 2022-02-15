@@ -6,13 +6,14 @@ void	die(char *str)
 	exit(-1);
 }
 
-static void	free_matrix(t_fdf *fdf)
+void	free_matrix(t_fdf *fdf)
 {
 	int	i;
 
-	i = 0;
-	while (fdf->matrix.matrix[i])
-		free(fdf->matrix.matrix[i++]);
+	i = fdf->matrix.rows - 1;
+	while (i)
+		free(fdf->matrix.matrix[i--]);
+	free(fdf->matrix.matrix[i]);
 	free(fdf->matrix.matrix);
 }
 
@@ -25,6 +26,8 @@ int	main(int argc, char **argv)
 	read_map(argv[1], &fdf);
 	open_win(&fdf);
 	draw(&fdf);
+	add_events(&fdf);
 	mlx_loop(fdf.mlx);
 	free_matrix(&fdf);
+	exit(0);
 }
