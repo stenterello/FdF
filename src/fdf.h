@@ -60,10 +60,14 @@ void	fill_line(int *matrix, char *line);
 void	init_fdf(t_fdf *fdf);
 void	open_win(t_fdf *fdf);
 void	draw(t_fdf *fdf);
+void	isometric(float *x, float *y, float dst[2], int z[2]);
+void	add_shift(float *x, float *y, float dst[2], t_fdf *fdf);
+void	add_zoom(float *x, float *y, float dst[2], t_fdf *fdf);
 void	define_delta(float *x, float *y, float dst[2], float d_xy[3]);
 int		to_continue(float d_xy[3], float *x, float *y, float dst[2]);
 int		color_choose(int z);
 void	free_matrix(t_fdf *fdf);
 void	add_events(t_fdf *fdf);
+void    my_pixel_put(t_menu *menu, int x, int y, int color);
 
 #endif

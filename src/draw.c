@@ -1,29 +1,5 @@
 #include "fdf.h"
 
-static void	isometric(float *x, float *y, float dst[2], int z[2])
-{
-	*x = (*x - *y) * cos(1);
-	*y = (*x + *y) * sin(1) - z[0];
-	dst[0] = (dst[0] - dst[1]) * cos(1);
-	dst[1] = (dst[0] + dst[1]) * sin(1) - z[1];
-}
-
-static void	add_shift(float *x, float *y, float dst[2], t_fdf *fdf)
-{
-	*x += fdf->shift_x;
-	*y += fdf->shift_y;
-	dst[0] += fdf->shift_x;
-	dst[1] += fdf->shift_y;
-}
-
-static void	add_zoom(float *x, float *y, float dst[2], t_fdf *fdf)
-{
-	*x *= fdf->zoom;
-	*y *= fdf->zoom;
-	dst[0] *= fdf->zoom;
-	dst[1] *= fdf->zoom;
-}
-
 void	bresenham(const float xy[2], float dst[2], t_fdf *fdf)
 {
 	float	d_xy[3];
@@ -52,10 +28,39 @@ void	bresenham(const float xy[2], float dst[2], t_fdf *fdf)
 
 static void	menu(t_fdf *fdf)
 {
+	int	i;
+	int	i2;
+
 	fdf->menu.img = mlx_new_image(fdf->mlx, fdf->menu.width, fdf->menu.height);
-	fdf->menu.addr = mlx_get_data_addr(fdf->menu.img, &fdf->menu.bbp, &fdf->menu.len, &fdf->menu.end);
+	fdf->menu.addr = mlx_get_data_addr(fdf->menu.img, &fdf->menu.bbp,
+			&fdf->menu.len, &fdf->menu.end);
+	i = 0;
+	while (i < fdf->menu.height)
+	{
+		i2 = 0;
+		while (i2 < fdf->menu.width)
+			my_pixel_put(&fdf->menu, i2++, i, 0xC16756);
+		i++;
+	}
 	mlx_put_image_to_window(fdf->mlx, fdf->win, fdf->menu.img, 0, 0);
-	mlx_string_put(fdf->mlx, fdf->win, 20, 50, 0x00FFFFFF, "Move plan: WASD");
+	mlx_string_put(fdf->mlx, fdf->win, 20, 50, 0x00FFFFFF, "Move plan:");
+	mlx_string_put(fdf->mlx, fdf->win, 130, 75, 0x00FFFFFF, "WASD");
+	mlx_string_put(fdf->mlx, fdf->win, 20, 125, 0x00FFFFFF, "Zoom:");
+	mlx_string_put(fdf->mlx, fdf->win, 70, 150, 0x00FFFFFF, "PageUp/PageDown");
+}
+
+static void	first_draw(float xy[2], float dst[2], t_fdf *fdf)
+{
+	dst[0] = xy[0] + 1;
+	dst[1] = xy[1];
+	bresenham(xy, dst, fdf);
+}
+
+static void	second_draw(float xy[2], float dst[2], t_fdf *fdf)
+{
+	dst[0] = xy[0];
+	dst[1] = xy[1] + 1;
+	bresenham(xy, dst, fdf);
 }
 
 void	draw(t_fdf *fdf)
@@ -70,17 +75,9 @@ void	draw(t_fdf *fdf)
 		while (xy[0] < fdf->matrix.cols)
 		{
 			if (xy[0] < fdf->matrix.cols - 1)
-			{
-				dst[0] = xy[0] + 1;
-				dst[1] = xy[1];
-				bresenham(xy, dst, fdf);
-			}
+				first_draw(xy, dst, fdf);
 			if (xy[1] < fdf->matrix.rows - 1)
-			{
-				dst[0] = xy[0];
-				dst[1] = xy[1] + 1;
-				bresenham(xy, dst, fdf);
-			}
+				second_draw(xy, dst, fdf);
 			xy[0]++;
 		}
 		xy[1]++;

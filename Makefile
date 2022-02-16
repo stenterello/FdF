@@ -7,6 +7,7 @@ SRCFLS= main.c \
 		win.c \
 		draw.c \
 		draw_utils.c \
+		draw_utils_2.c \
 		events.c
 
 SRC = $(addprefix src/, $(SRCFLS))
@@ -27,7 +28,7 @@ $(LIBFT):
 	$(MAKE) bonus -C ../libft 
 
 clean:
-	rm -f *.o
+	rm $(OBJS)
 	$(MAKE) clean -C ../libft
 
 fclean: clean
