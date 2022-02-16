@@ -18,8 +18,12 @@ typedef struct s_mat
 
 typedef struct s_mouse
 {
-	int	is_pressed;
-	int	is_scrolling;
+	int	    is_pressed;
+	int	    is_scrolling;
+	int		x;
+	int		y;
+    int		prev_x;
+    int		prev_y;
 }				t_mouse;
 
 typedef struct s_menu
@@ -49,6 +53,9 @@ typedef struct s_fdf
 	int		shift_y;
 	int		zoom;
 	int		scale_z;
+	double	alpha;
+	double	beta;
+	double	gamma;
 	t_mat	matrix;
 	t_menu	menu;
 	t_mouse	mouse;
@@ -69,5 +76,7 @@ int		color_choose(int z);
 void	free_matrix(t_fdf *fdf);
 void	add_events(t_fdf *fdf);
 void    my_pixel_put(t_menu *menu, int x, int y, int color);
+int	    mouse_press(int keycode, int x, int y, void *param);
+void	rotate_x(float *y, int *z, double alpha);
 
 #endif

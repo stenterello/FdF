@@ -12,6 +12,9 @@ void	bresenham(const float xy[2], float dst[2], t_fdf *fdf)
 	x = xy[0];
 	y = xy[1];
 	add_zoom(&x, &y, dst, fdf);
+    rotate_x(&y, &z[0], fdf->alpha);
+    //rotate_y();
+    //rotate_z();
 	isometric(&x, &y, dst, z);
 	add_shift(&x, &y, dst, fdf);
 	define_delta(&x, &y, dst, d_xy);
