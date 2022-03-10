@@ -3,13 +3,13 @@
 static void	move(t_fdf *fdf, char *str)
 {
 	if (!ft_strncmp("l", str, 1))
-		fdf->shift_x -= 5;
+		fdf->camera.shift_x -= 5;
 	else if (!ft_strncmp("r", str, 1))
-		fdf->shift_x += 5;
+		fdf->camera.shift_x += 5;
 	else if (!ft_strncmp("u", str, 1))
-		fdf->shift_y -= 5;
+		fdf->camera.shift_y -= 5;
 	else if (!ft_strncmp("d", str, 1))
-		fdf->shift_y += 5;
+		fdf->camera.shift_y += 5;
 	mlx_clear_window(fdf->mlx, fdf->win);
 	draw(fdf);
 }
@@ -17,12 +17,28 @@ static void	move(t_fdf *fdf, char *str)
 static void	zoom(t_fdf *fdf, char *str)
 {
 	if (!ft_strncmp("+", str, 1))
-		fdf->zoom += 1;
+		fdf->camera.zoom += 1;
 	else
-		fdf->zoom -= 1;
+		fdf->camera.zoom -= 1;
 	mlx_clear_window(fdf->mlx, fdf->win);
 	draw(fdf);
-	fdf->mouse.is_scrolling = 0;
+    menu(fdf);
+}
+
+void    change_angle(t_fdf *fdf)
+{
+    fdf->camera.alpha += 0.05;
+    mlx_clear_window(fdf->mlx, fdf->win);
+    draw(fdf);
+    menu(fdf);
+}
+
+void    flatten(t_fdf *fdf)
+{
+    fdf->camera.z_divisor -= 0.5;
+    mlx_clear_window(fdf->mlx, fdf->win);
+    draw(fdf);
+    menu(fdf);
 }
 
 static int	events(int keycode, t_fdf *fdf)
@@ -45,6 +61,11 @@ static int	events(int keycode, t_fdf *fdf)
 		zoom(fdf, "+");
 	else if (keycode == 121)
 		zoom(fdf, "-");
+    else if (keycode == 18)
+        change_angle(fdf);
+    else if (keycode == 19)
+        flatten(fdf);
+    printf("%d\n", keycode);
 	return (0);
 }
 

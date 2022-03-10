@@ -19,7 +19,6 @@ typedef struct s_mat
 typedef struct s_mouse
 {
 	int	    is_pressed;
-	int	    is_scrolling;
 	int		x;
 	int		y;
     int		prev_x;
@@ -38,27 +37,33 @@ typedef struct s_menu
 	int		end;
 }				t_menu;
 
+typedef struct s_camera
+{
+    double  alpha;
+    double  beta;
+    double  gamma;
+    int     shift_x;
+	int		shift_y;
+    int     zoom;
+    int     z_divisor;
+}               t_camera;
+
 typedef struct s_fdf
 {
-	float	x;
-	float	y;
-	float	z;
-	int		rows;
-	int		columns;
-	void	*mlx;
-	void	*win;
-	int		win_width;
-	int		win_height;
-	int		shift_x;
-	int		shift_y;
-	int		zoom;
-	int		scale_z;
-	double	alpha;
-	double	beta;
-	double	gamma;
-	t_mat	matrix;
-	t_menu	menu;
-	t_mouse	mouse;
+	float	    x;
+	float	    y;
+	float	    z;
+	int		    rows;
+	int		    columns;
+	void	    *mlx;
+	void	    *win;
+	int		    win_width;
+	int		    win_height;
+	int		    scale_z;
+	t_mat	    matrix;
+	t_menu	    menu;
+	t_mouse	    mouse;
+    t_camera    camera;
 }				t_fdf;
 
 void	die(char *str);
@@ -77,6 +82,10 @@ void	free_matrix(t_fdf *fdf);
 void	add_events(t_fdf *fdf);
 void    my_pixel_put(t_menu *menu, int x, int y, int color);
 int	    mouse_press(int keycode, int x, int y, void *param);
-void	rotate_x(float *y, int *z, double alpha);
+void    rotate_x(t_fdf *fdf, float *y, int *z);
+void    rotate_y(t_fdf *fdf, float *x, int *z);
+void    rotate_z(t_fdf *fdf, float *x, float *y);
+void	menu(t_fdf *fdf);
+void    rotate(t_fdf *fdf, float *x, float *y, int *z);
 
 #endif

@@ -1,5 +1,15 @@
 #include "fdf.h"
 
+void    rotate(t_fdf *fdf, float *x, float *y, int *z)
+{
+    *x *= fdf->camera.zoom;
+    *y *= fdf->camera.zoom;
+    *z *= fdf->camera.zoom;
+    //rotate_x(fdf, y, z);
+    //rotate_y(fdf, x, z);
+    //rotate_z(fdf, x, y);
+}
+
 void	bresenham(const float xy[2], float dst[2], t_fdf *fdf)
 {
 	float	d_xy[3];
@@ -11,11 +21,15 @@ void	bresenham(const float xy[2], float dst[2], t_fdf *fdf)
 	z[1] = fdf->matrix.matrix[(int)dst[1]][(int)dst[0]];
 	x = xy[0];
 	y = xy[1];
-	add_zoom(&x, &y, dst, fdf);
-    rotate_x(&y, &z[0], fdf->alpha);
-    //rotate_y();
-    //rotate_z();
-	isometric(&x, &y, dst, z);
+	// add_zoom(&x, &y, dst, fdf);
+    //rotate(fdf, &x, &y, &z[0]);
+    x *= fdf->camera.zoom;
+    y *= fdf->camera.zoom;
+    //z[0] *= fdf->camera.zoom / fdf->camera.z_divisor;
+    dst[0] *= fdf->camera.zoom;
+    dst[1] *= fdf->camera.zoom;
+    //z[1] *= fdf->camera.zoom / fdf->camera.z_divisor;
+	isometric(&x, &y, dst, z, fdf);
 	add_shift(&x, &y, dst, fdf);
 	define_delta(&x, &y, dst, d_xy);
 	while (to_continue(d_xy, &x, &y, dst))
@@ -29,7 +43,7 @@ void	bresenham(const float xy[2], float dst[2], t_fdf *fdf)
 	}
 }
 
-static void	menu(t_fdf *fdf)
+void	menu(t_fdf *fdf)
 {
 	int	i;
 	int	i2;

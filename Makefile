@@ -9,7 +9,8 @@ SRCFLS= main.c \
 		draw_utils.c \
 		draw_utils_2.c \
 		events.c \
-		events_2.c
+		events_2.c \
+		rotate.c
 
 SRC = $(addprefix src/, $(SRCFLS))
 OBJS=$(SRC:.c=.o)

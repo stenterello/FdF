@@ -48,7 +48,7 @@ static int	**get_matrix(char *file_name, t_fdf *fdf)
 
 	fd = open(file_name, O_RDONLY);
 	if (fd == -1)
-		die ("Wrong file name.");
+		die("Wrong file name.");
 	line = get_next_line(fd);
 	fdf->matrix.cols = count_cols(line, ' ');
 	free(line);
@@ -91,9 +91,21 @@ static void	fill_matrix(int **matrix, char *file_name)
 	close(fd);
 }
 
+static void	init_camera(t_fdf *fdf)
+{
+	fdf->camera.alpha = 0.8;
+	fdf->camera.beta = 0.8;
+	fdf->camera.gamma = 0.8;
+	fdf->camera.shift_x = fdf->menu.width + 325;
+	fdf->camera.shift_y = fdf->win_height / 7;
+	fdf->camera.zoom = 5;
+	fdf->camera.z_divisor = 1;
+}
+
 void	read_map(char *file_name, t_fdf *fdf)
 {
 	fdf->matrix.matrix = get_matrix(file_name, fdf);
 	fill_matrix(fdf->matrix.matrix, file_name);
 	init_fdf(fdf);
+    init_camera(fdf);
 }
