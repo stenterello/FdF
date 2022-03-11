@@ -1,28 +1,5 @@
 #include "fdf.h"
 
-// void	rotate_x(float *y, int *z, double alpha)
-// {
-//     int prev_y;
-
-//     prev_y = *y;
-//     *y = prev_y * cos(alpha) + *z * sin(alpha);
-//     *z = -prev_y * sin(alpha) + *z * cos(alpha);
-// }
-
-int mouse_move(void *param)
-{
-    t_fdf   *fdf;
-
-    fdf = (t_fdf *)param;
-    if (fdf->mouse.is_pressed)
-    {
-        fdf->camera.alpha += 1;
-        fdf->mouse.prev_x = fdf->mouse.x;
-        fdf->mouse.prev_y = fdf->mouse.y;
-    }
-    return (0);
-}
-
 int	mouse_press(int keycode, int x, int y, void *param)
 {
     t_fdf   *fdf;
@@ -30,11 +7,55 @@ int	mouse_press(int keycode, int x, int y, void *param)
     fdf = (t_fdf*)param;
     if (keycode == 1)
         fdf->mouse.is_pressed = 1;
-    fdf->camera.alpha += 1;
     fdf->mouse.prev_x = x;
     fdf->mouse.prev_y = y;
-    fdf->mouse.is_pressed = 1;
-	printf("x: %d\ny: %d\n", x, y);
-    mouse_move(&param);
+	return (0);
+}
+
+int	mouse_move(int x, int y, void *param)
+{
+	t_fdf	*fdf;
+	int		diff_x;
+	int		diff_y;
+
+	fdf = (t_fdf *)param;
+	if (!fdf->mouse.prev_x && !fdf->mouse.prev_y)
+	{
+		fdf->mouse.prev_x = x;
+		fdf->mouse.prev_y = y;
+	}
+	if (fdf->mouse.is_pressed)
+	{
+		diff_x = x - fdf->mouse.prev_x;
+		diff_y = y - fdf->mouse.prev_y;
+		fdf->mouse.prev_x = x;
+		fdf->mouse.prev_y = y;
+		if (diff_x > 0)
+			fdf->camera.beta += 0.005;
+		else if (diff_x < 0)
+			fdf->camera.beta -= 0.005;
+		if (diff_y > 0)
+			fdf->camera.alpha += 0.005;
+		else if (diff_y < 0)
+			fdf->camera.alpha -= 0.005;
+		(void)diff_x;
+		draw(fdf);
+		menu(fdf);
+		printf("alpha: %f\n", fdf->camera.alpha);
+		printf("beta: %f\n", fdf->camera.beta);
+		printf("gamma: %f\n", fdf->camera.gamma);
+	}
+	return (0);
+}
+
+int	mouse_release(int keycode, int x, int y, void *param)
+{
+	t_fdf	*fdf;
+
+	fdf = (t_fdf *)param;
+	fdf->mouse.is_pressed = 0;
+	(void)keycode;
+	(void)x;
+	(void)y;
 	return (0);
 }

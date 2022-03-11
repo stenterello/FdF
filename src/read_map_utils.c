@@ -28,7 +28,5 @@ void	init_fdf(t_fdf *fdf)
 	fdf->menu.height = fdf->win_height;
 	fdf->menu.color = 0x00000000;
 	fdf->scale_z = 1;
-    fdf->mouse.x = 0;
-    fdf->mouse.y = 0;
-	fdf->mouse.is_pressed = 0;
+	fdf->iso = 1;
 }

@@ -1,9 +1,9 @@
 #ifndef FDF_H
 # define FDF_H
 
-//# include "../mlx_linux/mlx.h"
-//# include "../mlx_linux/mlx_int.h"
-# include <mlx.h>
+# include "../mlx_linux/mlx.h"
+# include "../mlx_linux/mlx_int.h"
+//# include <mlx.h>
 # include <math.h>
 # include <fcntl.h>
 # include <stdio.h>
@@ -42,10 +42,10 @@ typedef struct s_camera
     double  alpha;
     double  beta;
     double  gamma;
-    int     shift_x;
-	int		shift_y;
-    int     zoom;
-    int     z_divisor;
+    float	shift_x;
+	float	shift_y;
+    float	zoom;
+    float	z_divisor;
 }               t_camera;
 
 typedef struct s_fdf
@@ -60,6 +60,12 @@ typedef struct s_fdf
 	int		    win_width;
 	int		    win_height;
 	int		    scale_z;
+	void		*img;
+	char		*addr;
+	int			bbp;
+	int			len;
+	int			end;
+	int			iso;
 	t_mat	    matrix;
 	t_menu	    menu;
 	t_mouse	    mouse;
@@ -80,12 +86,18 @@ int		to_continue(float d_xy[3], float *x, float *y, float dst[2]);
 int		color_choose(int z);
 void	free_matrix(t_fdf *fdf);
 void	add_events(t_fdf *fdf);
-void    my_pixel_put(t_menu *menu, int x, int y, int color);
+void    my_pixel_put_menu(t_menu *menu, int x, int y, int color);
+void	my_pixel_put_bg(t_fdf *fdf, int x, int y, int color);
 int	    mouse_press(int keycode, int x, int y, void *param);
+int		mouse_move(int x, int y, void *param);
+int		mouse_release(int keycode, int x, int y, void *param);
 void    rotate_x(t_fdf *fdf, float *y, int *z);
 void    rotate_y(t_fdf *fdf, float *x, int *z);
 void    rotate_z(t_fdf *fdf, float *x, float *y);
 void	menu(t_fdf *fdf);
 void    rotate(t_fdf *fdf, float *x, float *y, int *z);
+void    change_angle_alpha(t_fdf *fdf, int flag);
+void    change_angle_beta(t_fdf *fdf);
+void    change_angle_gamma(t_fdf *fdf);
 
 #endif

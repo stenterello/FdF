@@ -1,6 +1,6 @@
 #include "fdf.h"
 
-void    rotate_x(t_fdf *fdf, float *y, float *z)
+void    rotate_x(t_fdf *fdf, float *y, int *z)
 {
     int prev_y;
 
@@ -26,5 +26,5 @@ void    rotate_z(t_fdf *fdf, float *x, float *y)
     prev_x = *x;
     prev_y = *y;
     *x = prev_x * cos(fdf->camera.gamma) - prev_y * sin(fdf->camera.gamma);
-    *y = prev_y * sin(fdf->camera.gamma) - prev_y * cos(fdf->camera.gamma);
+    *y = prev_y * sin(fdf->camera.gamma) + prev_y * cos(fdf->camera.gamma);
 }
