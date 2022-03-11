@@ -13,18 +13,16 @@ void	bresenham(const float xy[2], float dst[2], t_fdf *fdf)
 	int		z[2];
 	float	x;
 	float	y;
-	int		color;
-
-	
+	int		color;	
 
 	z[0] = fdf->matrix.matrix[(int)xy[1]][(int)xy[0]];
 	z[1] = fdf->matrix.matrix[(int)dst[1]][(int)dst[0]];
 	color = color_choose(z[0]);
 	x = xy[0];
 	y = xy[1];
-	add_zoom(&x, &y, dst, fdf);
 	z[0] *= fdf->camera.zoom / fdf->camera.z_divisor;
 	z[1] *= fdf->camera.zoom / fdf->camera.z_divisor;
+    add_zoom(&x, &y, dst, fdf);
     rotate(fdf, &x, &y, &z[0]);
 	rotate(fdf, &dst[0], &dst[1], &z[1]);
 	if (fdf->iso)
@@ -46,8 +44,6 @@ void	menu(t_fdf *fdf)
 {
 	int	i;
 	int	i2;
-	int	x;
-	int	y;
 
 	fdf->menu.img = mlx_new_image(fdf->mlx, fdf->menu.width, fdf->menu.height);
 	fdf->menu.addr = mlx_get_data_addr(fdf->menu.img, &fdf->menu.bbp,
@@ -60,19 +56,15 @@ void	menu(t_fdf *fdf)
 			my_pixel_put_menu(&fdf->menu, i2++, i, 0x0000c20d);
 		i++;
 	}
-	x = 20;
-	y = 50;
 	mlx_put_image_to_window(fdf->mlx, fdf->win, fdf->menu.img, 0, 0);
-	mlx_string_put(fdf->mlx, fdf->win, x, y, 0x00FFFFFF, "Move plan:");
-	x += 20;
-	y += 50;
-	mlx_string_put(fdf->mlx, fdf->win, x, y, 0x00FFFFFF, "WASD");
-	x -= 20;
-	y -= 50;
-	mlx_string_put(fdf->mlx, fdf->win, 20, 125, 0x00FFFFFF, "Zoom:");
-	x += 20;
-	y += 50;
-	mlx_string_put(fdf->mlx, fdf->win, 70, 150, 0x00FFFFFF, "PageUp/PageDown");
+	mlx_string_put(fdf->mlx, fdf->win, 20, 50, 0x00FFFFFF, "Move plan:");
+	mlx_string_put(fdf->mlx, fdf->win, 140, 70, 0x00FFFFFF, "WASD");
+	mlx_string_put(fdf->mlx, fdf->win, 20, 120, 0x00FFFFFF, "Zoom:");
+	mlx_string_put(fdf->mlx, fdf->win, 80, 140, 0x00FFFFFF, "PageUp/PageDown");
+    mlx_string_put(fdf->mlx, fdf->win, 20, 200, 0x00FFFFFF, "Flatten:");
+	mlx_string_put(fdf->mlx, fdf->win, 80, 220, 0x00FFFFFF, "7 / 9");
+    mlx_string_put(fdf->mlx, fdf->win, 20, 270, 0x00FFFFFF, "Rotate:");
+	mlx_string_put(fdf->mlx, fdf->win, 80, 290, 0x00FFFFFF, "Mouse or 4, 5, 1, 2");
 }
 
 static void	first_draw(float xy[2], float dst[2], t_fdf *fdf)

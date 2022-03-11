@@ -6,7 +6,6 @@ void	isometric(float *x, float *y, float dst[2], int z[2])
 	*y = (*x + *y) * sin(1) - z[0];
 	dst[0] = (dst[0] - dst[1]) * cos(1);
 	dst[1] = (dst[0] + dst[1]) * sin(1) - z[1];
-    //rotate_x(fdf, y, &z[0]);
 }
 
 void	add_shift(float *x, float *y, float dst[2], t_fdf *fdf)

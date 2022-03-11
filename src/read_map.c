@@ -96,8 +96,8 @@ static void	init_camera(t_fdf *fdf)
 	fdf->camera.alpha = 0;
 	fdf->camera.beta = 0;
 	fdf->camera.gamma = 0;
-	fdf->camera.shift_x = fdf->menu.width + 350;
-	fdf->camera.shift_y = fdf->win_height / 7;
+	fdf->camera.shift_x = fdf->menu.width + 450;
+	fdf->camera.shift_y = fdf->win_height / 8;
 	fdf->camera.zoom = fdf->win_width / (fdf->matrix.rows * 2);
 	fdf->camera.z_divisor = 4;
 }

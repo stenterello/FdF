@@ -1,9 +1,9 @@
 #ifndef FDF_H
 # define FDF_H
 
-# include "../mlx_linux/mlx.h"
-# include "../mlx_linux/mlx_int.h"
-//# include <mlx.h>
+//# include "../mlx_linux/mlx.h"
+//# include "../mlx_linux/mlx_int.h"
+# include <mlx.h>
 # include <math.h>
 # include <fcntl.h>
 # include <stdio.h>
