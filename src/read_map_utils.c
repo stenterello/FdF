@@ -22,8 +22,8 @@ void	fill_line(int *matrix, char *line)
 
 void	init_fdf(t_fdf *fdf)
 {
-	fdf->win_width = 1300;
-	fdf->win_height = 900;
+	fdf->win_width = 1600;
+	fdf->win_height = 1000;
 	fdf->menu.width = 300;
 	fdf->menu.height = fdf->win_height;
 	fdf->menu.color = 0x00000000;

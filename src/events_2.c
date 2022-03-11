@@ -38,12 +38,8 @@ int	mouse_move(int x, int y, void *param)
 			fdf->camera.alpha += 0.005;
 		else if (diff_y < 0)
 			fdf->camera.alpha -= 0.005;
-		(void)diff_x;
 		draw(fdf);
 		menu(fdf);
-		printf("alpha: %f\n", fdf->camera.alpha);
-		printf("beta: %f\n", fdf->camera.beta);
-		printf("gamma: %f\n", fdf->camera.gamma);
 	}
 	return (0);
 }
