@@ -66,6 +66,8 @@ typedef struct s_fdf
 	int			len;
 	int			end;
 	int			iso;
+	int			start_color;
+	int			end_color;
 	t_mat		matrix;
 	t_menu		menu;
 	t_mouse		mouse;
@@ -87,7 +89,7 @@ void	add_shift(float *x, float *y, float dst[2], t_fdf *fdf);
 void	add_zoom(float *x, float *y, float dst[2], t_fdf *fdf);
 void	define_delta(float *x, float *y, float dst[2], float d_xy[3]);
 int		to_continue(float d_xy[3], float *x, float *y, float dst[2]);
-int		color_choose(int z);
+int		color_choose(const float xy[2], float dst[2], float d_xy[2]);
 void	free_matrix(t_fdf *fdf);
 void	add_events(t_fdf *fdf);
 void	my_pixel_put_menu(t_menu *menu, int x, int y, int color);

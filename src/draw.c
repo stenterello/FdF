@@ -13,15 +13,20 @@ void	bresenham(const float xy[2], float dst[2], t_fdf *fdf)
 	int		z[2];
 	float	x;
 	float	y;
-	int		color;	
+	int		color;
+	int		orig_z[2];
+	int		i;
+	int		molt;
 
-	z[0] = fdf->matrix.matrix[(int)xy[1]][(int)xy[0]];
-	z[1] = fdf->matrix.matrix[(int)dst[1]][(int)dst[0]];
-	color = color_choose(z[0]);
+	i = 0x00;
+	molt = 16;
+	orig_z[0] = fdf->matrix.matrix[(int)xy[1]][(int)xy[0]];
+	orig_z[1] = fdf->matrix.matrix[(int)dst[1]][(int)dst[0]];
+	color = fdf->start_color;
 	x = xy[0];
 	y = xy[1];
-	z[0] *= fdf->camera.zoom / fdf->camera.z_divisor;
-	z[1] *= fdf->camera.zoom / fdf->camera.z_divisor;
+	z[0] = orig_z[0] * fdf->camera.zoom / fdf->camera.z_divisor;
+	z[1] = orig_z[1] * fdf->camera.zoom / fdf->camera.z_divisor;
 	add_zoom(&x, &y, dst, fdf);
 	rotate(fdf, &x, &y, &z[0]);
 	rotate(fdf, &dst[0], &dst[1], &z[1]);
@@ -31,7 +36,39 @@ void	bresenham(const float xy[2], float dst[2], t_fdf *fdf)
 	define_delta(&x, &y, dst, d_xy);
 	while (to_continue(d_xy, &x, &y, dst))
 	{
-		mlx_pixel_put(fdf->mlx, fdf->win, x, y, color);
+		if (orig_z[0] || orig_z[1])
+		{
+			if (orig_z[0] && orig_z[1])
+			{
+				mlx_pixel_put(fdf->mlx, fdf->win, x, y, 0x0000FF00);
+			}
+			else if (orig_z[1])
+			{
+				mlx_pixel_put(fdf->mlx, fdf->win, x, y, color);
+				i++;
+				if (orig_z[1] / molt < i)
+				{
+					color -= 65536;
+					color += 256;
+					i = 0x00;
+				}
+			}
+			else if (orig_z[0])
+			{
+				mlx_pixel_put(fdf->mlx, fdf->win, x, y, color);
+				i++;
+				if (orig_z[0] / molt < i)
+				{
+					color += 65536;
+					color -= 256;
+					i = 0x00;
+				}
+			}
+		}
+		else
+		{
+			mlx_pixel_put(fdf->mlx, fdf->win, x, y, 0x00FF0000);
+		}
 		x += d_xy[0];
 		y += d_xy[1];
 		if (x > fdf->win_width || x < 0

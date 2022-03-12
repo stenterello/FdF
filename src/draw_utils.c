@@ -41,10 +41,3 @@ int	to_continue(float d_xy[3], float *x, float *y, float dst[2])
 	}
 	return (0);
 }
-
-int	color_choose(int z)
-{
-	if (z)
-		return (0x0000FF00);
-	return (0x00FF0000);
-}

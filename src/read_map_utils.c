@@ -29,6 +29,8 @@ void	init_fdf(t_fdf *fdf)
 	fdf->menu.color = 0x00000000;
 	fdf->scale_z = 1;
 	fdf->iso = 1;
+	fdf->start_color = 0x00FF0000;
+	fdf->end_color = 0x0000FF00;
 }
 
 void	init_camera(t_fdf *fdf)
