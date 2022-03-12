@@ -1,10 +1,10 @@
 #include "fdf.h"
 
-void    rotate(t_fdf *fdf, float *x, float *y, int *z)
+void	rotate(t_fdf *fdf, float *x, float *y, int *z)
 {
-    rotate_x(fdf, y, z);
-    rotate_y(fdf, x, z);
-    rotate_z(fdf, x, y);
+	rotate_x(fdf, y, z);
+	rotate_y(fdf, x, z);
+	rotate_z(fdf, x, y);
 }
 
 void	bresenham(const float xy[2], float dst[2], t_fdf *fdf)
@@ -22,8 +22,8 @@ void	bresenham(const float xy[2], float dst[2], t_fdf *fdf)
 	y = xy[1];
 	z[0] *= fdf->camera.zoom / fdf->camera.z_divisor;
 	z[1] *= fdf->camera.zoom / fdf->camera.z_divisor;
-    add_zoom(&x, &y, dst, fdf);
-    rotate(fdf, &x, &y, &z[0]);
+	add_zoom(&x, &y, dst, fdf);
+	rotate(fdf, &x, &y, &z[0]);
 	rotate(fdf, &dst[0], &dst[1], &z[1]);
 	if (fdf->iso)
 		isometric(&x, &y, dst, z);
@@ -40,7 +40,7 @@ void	bresenham(const float xy[2], float dst[2], t_fdf *fdf)
 	}
 }
 
-void	menu(t_fdf *fdf)
+void	draw_menu(t_fdf *fdf)
 {
 	int	i;
 	int	i2;
@@ -61,10 +61,11 @@ void	menu(t_fdf *fdf)
 	mlx_string_put(fdf->mlx, fdf->win, 140, 70, 0x00FFFFFF, "WASD");
 	mlx_string_put(fdf->mlx, fdf->win, 20, 120, 0x00FFFFFF, "Zoom:");
 	mlx_string_put(fdf->mlx, fdf->win, 80, 140, 0x00FFFFFF, "PageUp/PageDown");
-    mlx_string_put(fdf->mlx, fdf->win, 20, 200, 0x00FFFFFF, "Flatten:");
+	mlx_string_put(fdf->mlx, fdf->win, 20, 200, 0x00FFFFFF, "Flatten:");
 	mlx_string_put(fdf->mlx, fdf->win, 80, 220, 0x00FFFFFF, "7 / 9");
-    mlx_string_put(fdf->mlx, fdf->win, 20, 270, 0x00FFFFFF, "Rotate:");
-	mlx_string_put(fdf->mlx, fdf->win, 80, 290, 0x00FFFFFF, "Mouse or 4, 5, 1, 2");
+	mlx_string_put(fdf->mlx, fdf->win, 20, 270, 0x00FFFFFF, "Rotate:");
+	mlx_string_put(fdf->mlx, fdf->win, 80, 290, 0x00FFFFFF,
+		"Mouse or 4, 5, 1, 2");
 }
 
 static void	first_draw(float xy[2], float dst[2], t_fdf *fdf)
@@ -88,7 +89,7 @@ void	draw_background(t_fdf *fdf)
 
 	fdf->img = mlx_new_image(fdf->mlx, fdf->win_width, fdf->win_height);
 	fdf->addr = mlx_get_data_addr(fdf->img, &fdf->bbp,
-		&fdf->len, &fdf->end);
+			&fdf->len, &fdf->end);
 	i = 0;
 	while (i < fdf->win_height)
 	{
@@ -103,7 +104,7 @@ void	draw_background(t_fdf *fdf)
 	mlx_put_image_to_window(fdf->mlx, fdf->win, fdf->img, 0, 0);
 }
 
-void	draw(t_fdf *fdf)
+void	draw_plane(t_fdf *fdf)
 {
 	float	xy[2];
 	float	dst[2];
@@ -123,5 +124,11 @@ void	draw(t_fdf *fdf)
 		}
 		xy[1]++;
 	}
-	menu(fdf);
+}
+
+void	draw(t_fdf *fdf)
+{
+	mlx_clear_window(fdf->mlx, fdf->win);
+	draw_plane(fdf);
+	draw_menu(fdf);
 }

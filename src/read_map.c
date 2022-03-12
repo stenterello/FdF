@@ -91,31 +91,11 @@ static void	fill_matrix(int **matrix, char *file_name)
 	close(fd);
 }
 
-static void	init_camera(t_fdf *fdf)
-{
-	fdf->camera.alpha = 0;
-	fdf->camera.beta = 0;
-	fdf->camera.gamma = 0;
-	fdf->camera.shift_x = fdf->menu.width + 450;
-	fdf->camera.shift_y = fdf->win_height / 8;
-	fdf->camera.zoom = fdf->win_width / (fdf->matrix.rows * 2);
-	fdf->camera.z_divisor = 4;
-}
-
-static void	init_mouse(t_fdf *fdf)
-{
-	fdf->mouse.is_pressed = 0;
-	fdf->mouse.prev_x = 0;
-	fdf->mouse.prev_y = 0;
-	fdf->mouse.x = 0;
-	fdf->mouse.y = 0;
-}
-
 void	read_map(char *file_name, t_fdf *fdf)
 {
 	fdf->matrix.matrix = get_matrix(file_name, fdf);
 	fill_matrix(fdf->matrix.matrix, file_name);
 	init_fdf(fdf);
-    init_camera(fdf);
+	init_camera(fdf);
 	init_mouse(fdf);
 }
