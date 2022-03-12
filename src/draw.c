@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   draw.c                                             :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: ddelladi <marvin@42.fr>                    +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2022/03/12 18:08:53 by ddelladi          #+#    #+#             */
+/*   Updated: 2022/03/12 18:08:55 by ddelladi         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "fdf.h"
 
 void	bresenham(const float xy[2], float dst[2], t_fdf *fdf)
@@ -7,15 +19,12 @@ void	bresenham(const float xy[2], float dst[2], t_fdf *fdf)
 	float	x;
 	float	y;
 	int		color;
-	float		orig_z[2];
+	float	orig_z[2];
 	int		i;
-	float		step[2];
 
 	i = 0x00;
 	orig_z[0] = fdf->matrix.matrix[(int)xy[1]][(int)xy[0]];
 	orig_z[1] = fdf->matrix.matrix[(int)dst[1]][(int)dst[0]];
-	step[0] = ft_abs(orig_z[0] / 16 * fdf->camera.zoom / fdf->camera.z_divisor);
-	step[1] = ft_abs(orig_z[1] / 16 * fdf->camera.zoom / fdf->camera.z_divisor);
 	color = fdf->start_color;
 	x = xy[0];
 	y = xy[1];
@@ -30,6 +39,7 @@ void	bresenham(const float xy[2], float dst[2], t_fdf *fdf)
 	define_delta(&x, &y, dst, d_xy);
 	while (to_continue(d_xy, &x, &y, dst))
 	{
+        fdf->bench_color = fdf->start_color;
 		if (orig_z[0] && orig_z[1])
 			mlx_pixel_put(fdf->mlx, fdf->win, x, y, fdf->end_color);
 		else if (orig_z[0] || orig_z[1])
@@ -38,7 +48,7 @@ void	bresenham(const float xy[2], float dst[2], t_fdf *fdf)
 			{
 				mlx_pixel_put(fdf->mlx, fdf->win, x, y, color);
 				i++;
-				if (step[1] < i)
+				if (d_xy[2] / 255 < i)
 				{
 					color -= 65536;
 					color += 256;
@@ -49,7 +59,7 @@ void	bresenham(const float xy[2], float dst[2], t_fdf *fdf)
 			{
 				mlx_pixel_put(fdf->mlx, fdf->win, x, y, color);
 				i++;
-				if (step[0] < i)
+				if (d_xy[2] / 255 < i)
 				{
 					color += 65536;
 					color -= 256;

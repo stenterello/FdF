@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   fdf.h                                              :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: ddelladi <marvin@42.fr>                    +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2022/03/12 18:09:43 by ddelladi          #+#    #+#             */
+/*   Updated: 2022/03/12 18:09:45 by ddelladi         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #ifndef FDF_H
 # define FDF_H
 
@@ -67,6 +79,7 @@ typedef struct s_fdf
 	int			end;
 	int			iso;
 	int			start_color;
+    int         bench_color;
 	int			end_color;
 	t_mat		matrix;
 	t_menu		menu;
