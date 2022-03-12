@@ -104,5 +104,6 @@ void	rotate(t_fdf *fdf, float *x, float *y, int *z);
 void	change_angle_alpha(t_fdf *fdf, int flag);
 void	change_angle_beta(t_fdf *fdf);
 void	change_angle_gamma(t_fdf *fdf);
+float	ft_abs(float c);
 
 #endif

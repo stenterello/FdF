@@ -28,3 +28,17 @@ void	rotate_z(t_fdf *fdf, float *x, float *y)
 	*x = prev_x * cos(fdf->camera.gamma) - prev_y * sin(fdf->camera.gamma);
 	*y = prev_y * sin(fdf->camera.gamma) + prev_y * cos(fdf->camera.gamma);
 }
+
+void	rotate(t_fdf *fdf, float *x, float *y, int *z)
+{
+	int	prev_x;
+	int	prev_y;
+	int	prev_z;
+
+	prev_x = *x;
+	prev_y = *y;
+	prev_z = *z;
+	rotate_x(fdf, y, z);
+	rotate_y(fdf, x, z);
+	rotate_z(fdf, x, y);
+}

@@ -1,12 +1,5 @@
 #include "fdf.h"
 
-void	rotate(t_fdf *fdf, float *x, float *y, int *z)
-{
-	rotate_x(fdf, y, z);
-	rotate_y(fdf, x, z);
-	rotate_z(fdf, x, y);
-}
-
 void	bresenham(const float xy[2], float dst[2], t_fdf *fdf)
 {
 	float	d_xy[3];
@@ -14,14 +7,15 @@ void	bresenham(const float xy[2], float dst[2], t_fdf *fdf)
 	float	x;
 	float	y;
 	int		color;
-	int		orig_z[2];
+	float		orig_z[2];
 	int		i;
-	int		molt;
+	float		step[2];
 
 	i = 0x00;
-	molt = 16;
 	orig_z[0] = fdf->matrix.matrix[(int)xy[1]][(int)xy[0]];
 	orig_z[1] = fdf->matrix.matrix[(int)dst[1]][(int)dst[0]];
+	step[0] = ft_abs(orig_z[0] / 16 * fdf->camera.zoom / fdf->camera.z_divisor);
+	step[1] = ft_abs(orig_z[1] / 16 * fdf->camera.zoom / fdf->camera.z_divisor);
 	color = fdf->start_color;
 	x = xy[0];
 	y = xy[1];
@@ -36,17 +30,15 @@ void	bresenham(const float xy[2], float dst[2], t_fdf *fdf)
 	define_delta(&x, &y, dst, d_xy);
 	while (to_continue(d_xy, &x, &y, dst))
 	{
-		if (orig_z[0] || orig_z[1])
+		if (orig_z[0] && orig_z[1])
+			mlx_pixel_put(fdf->mlx, fdf->win, x, y, fdf->end_color);
+		else if (orig_z[0] || orig_z[1])
 		{
-			if (orig_z[0] && orig_z[1])
-			{
-				mlx_pixel_put(fdf->mlx, fdf->win, x, y, 0x0000FF00);
-			}
-			else if (orig_z[1])
+			if (orig_z[1])
 			{
 				mlx_pixel_put(fdf->mlx, fdf->win, x, y, color);
 				i++;
-				if (orig_z[1] / molt < i)
+				if (step[1] < i)
 				{
 					color -= 65536;
 					color += 256;
@@ -57,7 +49,7 @@ void	bresenham(const float xy[2], float dst[2], t_fdf *fdf)
 			{
 				mlx_pixel_put(fdf->mlx, fdf->win, x, y, color);
 				i++;
-				if (orig_z[0] / molt < i)
+				if (step[0] < i)
 				{
 					color += 65536;
 					color -= 256;
@@ -66,14 +58,9 @@ void	bresenham(const float xy[2], float dst[2], t_fdf *fdf)
 			}
 		}
 		else
-		{
-			mlx_pixel_put(fdf->mlx, fdf->win, x, y, 0x00FF0000);
-		}
+			mlx_pixel_put(fdf->mlx, fdf->win, x, y, fdf->start_color);
 		x += d_xy[0];
 		y += d_xy[1];
-		if (x > fdf->win_width || x < 0
-			|| y > fdf->win_height || y < 0)
-			break ;
 	}
 }
 
@@ -94,15 +81,10 @@ void	draw_menu(t_fdf *fdf)
 		i++;
 	}
 	mlx_put_image_to_window(fdf->mlx, fdf->win, fdf->menu.img, 0, 0);
-	mlx_string_put(fdf->mlx, fdf->win, 20, 50, 0x00FFFFFF, "Move plan:");
-	mlx_string_put(fdf->mlx, fdf->win, 140, 70, 0x00FFFFFF, "WASD");
-	mlx_string_put(fdf->mlx, fdf->win, 20, 120, 0x00FFFFFF, "Zoom:");
-	mlx_string_put(fdf->mlx, fdf->win, 80, 140, 0x00FFFFFF, "PageUp/PageDown");
-	mlx_string_put(fdf->mlx, fdf->win, 20, 200, 0x00FFFFFF, "Flatten:");
-	mlx_string_put(fdf->mlx, fdf->win, 80, 220, 0x00FFFFFF, "7 / 9");
-	mlx_string_put(fdf->mlx, fdf->win, 20, 270, 0x00FFFFFF, "Rotate:");
-	mlx_string_put(fdf->mlx, fdf->win, 80, 290, 0x00FFFFFF,
-		"Mouse or 4, 5, 1, 2");
+	mlx_string_put(fdf->mlx, fdf->win, 20, 50, 0x00FFFFFF, "Move plan: WASD");
+	mlx_string_put(fdf->mlx, fdf->win, 20, 120, 0x00FFFFFF, "Zoom: PageUp/PageDown or Scroll");
+	mlx_string_put(fdf->mlx, fdf->win, 20, 200, 0x00FFFFFF, "Flatten: 7 / 9");
+	mlx_string_put(fdf->mlx, fdf->win, 20, 270, 0x00FFFFFF, "Rotate: Mouse or 4, 5, 1, 2");
 }
 
 static void	first_draw(float xy[2], float dst[2], t_fdf *fdf)
