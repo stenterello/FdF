@@ -60,6 +60,21 @@ typedef struct s_camera
 	float	z_divisor;
 }				t_camera;
 
+typedef struct s_line
+{
+	float	xy[2];
+	float	dst[2];
+	float	d_xy[3];
+	float	z[2];
+	float	x;
+	float	y;
+	int		color;
+	float	orig_z[2];
+	int		len;
+	float	virtual_x;
+	float	virtual_y;
+}				t_line;
+
 typedef struct s_fdf
 {
 	float		x;
@@ -79,7 +94,7 @@ typedef struct s_fdf
 	int			end;
 	int			iso;
 	int			start_color;
-    int         bench_color;
+	int			bench_color;
 	int			end_color;
 	t_mat		matrix;
 	t_menu		menu;
@@ -94,14 +109,18 @@ void	init_fdf(t_fdf *fdf);
 void	init_camera(t_fdf *fdf);
 void	init_mouse(t_fdf *fdf);
 void	open_win(t_fdf *fdf);
+void	bresenham(t_line *line, t_fdf *fdf);
 void	draw(t_fdf *fdf);
 void	draw_plane(t_fdf *fdf);
 void	draw_menu(t_fdf *fdf);
-void	isometric(float *x, float *y, float dst[2], int z[2]);
-void	add_shift(float *x, float *y, float dst[2], t_fdf *fdf);
-void	add_zoom(float *x, float *y, float dst[2], t_fdf *fdf);
-void	define_delta(float *x, float *y, float dst[2], float d_xy[3]);
-int		to_continue(float d_xy[3], float *x, float *y, float dst[2]);
+void	draw_background(t_fdf *fdf);
+void	first_draw(t_line *line, t_fdf *fdf);
+void	second_draw(t_line *line, t_fdf *fdf);
+void	isometric(t_line *line);
+void	add_shift(t_line *line, t_fdf *fdf);
+void	add_zoom(t_line *line, t_fdf *fdf);
+void	define_delta(t_line *line);
+int		to_continue(t_line *line);
 int		color_choose(const float xy[2], float dst[2], float d_xy[2]);
 void	free_matrix(t_fdf *fdf);
 void	add_events(t_fdf *fdf);
@@ -110,13 +129,19 @@ void	my_pixel_put_bg(t_fdf *fdf, int x, int y, int color);
 int		mouse_press(int keycode, int x, int y, void *param);
 int		mouse_move(int x, int y, void *param);
 int		mouse_release(int keycode, int x, int y, void *param);
-void	rotate_x(t_fdf *fdf, float *y, int *z);
-void	rotate_y(t_fdf *fdf, float *x, int *z);
+void	rotate_x(t_fdf *fdf, float *y, float *z);
+void	rotate_y(t_fdf *fdf, float *x, float *z);
 void	rotate_z(t_fdf *fdf, float *x, float *y);
-void	rotate(t_fdf *fdf, float *x, float *y, int *z);
+void	rotate(t_line *line, t_fdf *fdf, int flag);
 void	change_angle_alpha(t_fdf *fdf, int flag);
 void	change_angle_beta(t_fdf *fdf);
 void	change_angle_gamma(t_fdf *fdf);
 float	ft_abs(float c);
+void	move(t_fdf *fdf, int keycode);
+void	zoom(t_fdf *fdf, int keycode);
+void	flatten(t_fdf *fdf, int keycode);
+int		virtual_bresenham(t_line *line);
+int		to_continue_virtual(t_line *line);
+float	get_max_delta(float ret[3]);	
 
 #endif

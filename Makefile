@@ -8,8 +8,10 @@ SRCFLS= main.c \
 		draw.c \
 		draw_utils.c \
 		draw_utils_2.c \
+		draw_utils_3.c \
 		events.c \
 		events_2.c \
+		events_3.c \
 		rotate.c
 
 SRC = $(addprefix src/, $(SRCFLS))
@@ -36,3 +38,7 @@ clean:
 fclean: clean
 	rm -f $(NAME)
 	$(MAKE) fclean -C ../libft
+
+re: fclean all
+
+.PHONY: all clean fclean re

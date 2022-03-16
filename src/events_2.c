@@ -68,3 +68,12 @@ int	mouse_release(int keycode, int x, int y, void *param)
 	(void)y;
 	return (0);
 }
+
+void	flatten(t_fdf *fdf, int keycode)
+{
+	if (keycode == 89 && fdf->camera.z_divisor - 0.5 >= 1 && fdf->camera.z_divisor > 2)
+		fdf->camera.z_divisor -= 0.5;
+	else if (keycode == 92)
+		fdf->camera.z_divisor += 0.5;
+	draw(fdf);
+}

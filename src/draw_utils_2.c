@@ -12,28 +12,28 @@
 
 #include "fdf.h"
 
-void	isometric(float *x, float *y, float dst[2], int z[2])
+void	isometric(t_line *line)
 {
-	*x = (*x - *y) * cos(1);
-	*y = (*x + *y) * sin(1) - z[0];
-	dst[0] = (dst[0] - dst[1]) * cos(1);
-	dst[1] = (dst[0] + dst[1]) * sin(1) - z[1];
+	line->x = (line->x - line->y) * cos(1);
+	line->y = (line->x + line->y) * sin(1) - line->z[0];
+	line->dst[0] = (line->dst[0] - line->dst[1]) * cos(1);
+	line->dst[1] = (line->dst[0] + line->dst[1]) * sin(1) - line->z[1];
 }
 
-void	add_shift(float *x, float *y, float dst[2], t_fdf *fdf)
+void	add_shift(t_line *line, t_fdf *fdf)
 {
-	*x += fdf->camera.shift_x;
-	*y += fdf->camera.shift_y;
-	dst[0] += fdf->camera.shift_x;
-	dst[1] += fdf->camera.shift_y;
+	line->x += fdf->camera.shift_x;
+	line->y += fdf->camera.shift_y;
+	line->dst[0] += fdf->camera.shift_x;
+	line->dst[1] += fdf->camera.shift_y;
 }
 
-void	add_zoom(float *x, float *y, float dst[2], t_fdf *fdf)
+void	add_zoom(t_line *line, t_fdf *fdf)
 {
-	*x *= fdf->camera.zoom;
-	*y *= fdf->camera.zoom;
-	dst[0] *= fdf->camera.zoom;
-	dst[1] *= fdf->camera.zoom;
+	line->x *= fdf->camera.zoom;
+	line->y *= fdf->camera.zoom;
+	line->dst[0] *= fdf->camera.zoom;
+	line->dst[1] *= fdf->camera.zoom;
 }
 
 void	my_pixel_put_menu(t_menu *menu, int x, int y, int color)
