@@ -36,7 +36,7 @@ void	init_fdf(t_fdf *fdf)
 {
 	fdf->win_width = 1600;
 	fdf->win_height = 1000;
-	fdf->menu.width = 300;
+	fdf->menu.width = 400;
 	fdf->menu.height = fdf->win_height;
 	fdf->menu.color = 0x00000000;
 	fdf->scale_z = 1;

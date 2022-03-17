@@ -23,8 +23,12 @@ void	change_angle(t_fdf *fdf, int keycode)
 {
 	if (keycode == 83)
 		fdf->camera.alpha += 0.005;
+	else if (keycode == 86)
+		fdf->camera.alpha -= 0.005;
 	else if (keycode == 84)
 		fdf->camera.beta += 0.005;
+	else if (keycode == 87)
+		fdf->camera.beta -= 0.005;
 	else if (keycode == 85)
 		fdf->camera.gamma += 0.005;
 	else if (keycode == 88)
@@ -40,32 +44,16 @@ static int	events(int keycode, t_fdf *fdf)
 		move(fdf, keycode);
 	else if (keycode == 116 || keycode == 121)
 		zoom(fdf, keycode);
-	else if ((keycode >= 83 && keycode <= 85) || keycode == 88)
+	else if (keycode >= 83 && keycode <= 88)
 		change_angle(fdf, keycode);
 	else if (keycode == 89 || keycode == 92)
 		flatten(fdf, keycode);
 	else if (keycode == 31)
-	{
-		fdf->camera.alpha = 0;
-		fdf->camera.beta = 0;
-		fdf->camera.gamma = 0;
-		fdf->iso = 0;
-		draw(fdf);
-	}
+		flat(fdf);
 	else if (keycode == 35)
-	{
-		if (!fdf->iso)
-			fdf->iso = 1;
-		fdf->camera.alpha = -0.34;
-		fdf->camera.beta = -0.425;
-		draw(fdf);
-	}
+		profile(fdf);
 	else if (keycode == 34)
-	{
-		fdf->iso = 1;
-		draw(fdf);
-	}
-	printf("%d\n", keycode);
+		return_iso(fdf);
 	return (0);
 }
 

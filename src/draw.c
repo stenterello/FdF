@@ -16,12 +16,14 @@ void	prepare(t_line *line, t_fdf *fdf)
 {
 	line->orig_z[0] = fdf->matrix.matrix[(int)line->xy[1]][(int)line->xy[0]];
 	line->orig_z[1] = fdf->matrix.matrix[(int)line->dst[1]][(int)line->dst[0]];
-	line->color = fdf->start_color;
+	if (line->orig_z[0] && !line->orig_z[1])
+		line->color = fdf->end_color;
+	else
+		line->color = fdf->start_color;
 	line->x = line->xy[0];
 	line->y = line->xy[1];
 	line->z[0] = line->orig_z[0] * fdf->camera.zoom / fdf->camera.z_divisor;
 	line->z[1] = line->orig_z[1] * fdf->camera.zoom / fdf->camera.z_divisor;
-	line->len = virtual_bresenham(line);
 	add_zoom(line, fdf);
 	rotate(line, fdf, 0);
 	rotate(line, fdf, 1);
@@ -29,15 +31,19 @@ void	prepare(t_line *line, t_fdf *fdf)
 		isometric(line);
 	add_shift(line, fdf);
 	define_delta(line);
+	line->len = virtual_bresenham(line);
+	line->unit = line->len / (float)255;
+	if (line->unit > 1.49)
+		line->unit = 1.49;
 }
 
 void	increasing_color(t_fdf *fdf, t_line *line, int *i)
 {
 	mlx_pixel_put(fdf->mlx, fdf->win, line->x, line->y, line->color);
-	if ((line->len % 255) < (*i)++)
+	if (line->unit < (*i)++)
 	{
-		line->color -= 65536;
-		line->color += 256;
+		line->color -= 65536 * (int)((float)*i / line->unit);
+		line->color += 256 * (int)((float)*i / line->unit);
 		*i = 0x00;
 	}
 }
@@ -45,17 +51,20 @@ void	increasing_color(t_fdf *fdf, t_line *line, int *i)
 void	decreasing_color(t_fdf *fdf, t_line *line, int *i)
 {
 	mlx_pixel_put(fdf->mlx, fdf->win, line->x, line->y, line->color);
-	if ((line->len % 255) < (*i)++)
+	if (line->unit < (*i)++)
 	{
-		line->color += 65536;
-		line->color -= 256;
+		if (line->color + 65536 * (int)((float)*i / line->unit) < 0x00FF0000)
+		{
+			line->color += 65536 * (int)((float)*i / line->unit);
+			line->color -= 256 * (int)((float)*i / line->unit);
+		}
 		*i = 0x00;
 	}
 }
 
 void	bresenham(t_line *line, t_fdf *fdf)
 {
-	int		i;
+	int	i;
 
 	i = 0x00;
 	prepare(line, fdf);
@@ -101,4 +110,8 @@ void	draw_menu(t_fdf *fdf)
 	mlx_string_put(fdf->mlx, fdf->win, 20, 200, 0x00FFFFFF, "Flatten: 7 / 9");
 	mlx_string_put(fdf->mlx, fdf->win, 20, 270, 0x00FFFFFF,
 		"Rotate: Mouse or 1-4, 2-5");
+	mlx_string_put(fdf->mlx, fdf->win, 20, 350, 0x00FFFFFF,
+		"Change Point of View: P, O");
+	mlx_string_put(fdf->mlx, fdf->win, 20, 420, 0x00FFFFFF,
+		"Reset: I");
 }

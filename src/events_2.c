@@ -19,6 +19,8 @@ int	mouse_press(int keycode, int x, int y, void *param)
 	fdf = (t_fdf *)param;
 	if (keycode == 1)
 		fdf->mouse.is_pressed = 1;
+	else if (keycode == 4 || keycode == 5)
+		zoom(fdf, keycode);
 	fdf->mouse.prev_x = x;
 	fdf->mouse.prev_y = y;
 	return (0);
@@ -71,7 +73,8 @@ int	mouse_release(int keycode, int x, int y, void *param)
 
 void	flatten(t_fdf *fdf, int keycode)
 {
-	if (keycode == 89 && fdf->camera.z_divisor - 0.5 >= 1 && fdf->camera.z_divisor > 2)
+	if (keycode == 89 && fdf->camera.z_divisor - 0.5 >= 1
+		&& fdf->camera.z_divisor > 2)
 		fdf->camera.z_divisor -= 0.5;
 	else if (keycode == 92)
 		fdf->camera.z_divisor += 0.5;

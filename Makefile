@@ -9,6 +9,7 @@ SRCFLS= main.c \
 		draw_utils.c \
 		draw_utils_2.c \
 		draw_utils_3.c \
+		draw_utils_4.c \
 		events.c \
 		events_2.c \
 		events_3.c \

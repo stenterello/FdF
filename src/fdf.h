@@ -69,10 +69,11 @@ typedef struct s_line
 	float	x;
 	float	y;
 	int		color;
-	float	orig_z[2];
+	int		orig_z[2];
 	int		len;
 	float	virtual_x;
 	float	virtual_y;
+	double	unit;
 }				t_line;
 
 typedef struct s_fdf
@@ -142,6 +143,9 @@ void	zoom(t_fdf *fdf, int keycode);
 void	flatten(t_fdf *fdf, int keycode);
 int		virtual_bresenham(t_line *line);
 int		to_continue_virtual(t_line *line);
-float	get_max_delta(float ret[3]);	
+float	get_max_delta(float ret[3]);
+void	flat(t_fdf *fdf);
+void	profile(t_fdf *fdf);
+void	return_iso(t_fdf *fdf);
 
 #endif
