@@ -23,12 +23,6 @@ $(NAME): $(LIBFT) $(OBJS)
 
 all: $(NAME)
 
-%.o: %.c
-	gcc $(FLAGS) -I/usr/include -Imlx_linux -O0 -c $< -o $@
-
-lin: $(LIBFT) $(OBJS)
-	gcc $(FLAGS) $(OBJS) $(LIBFT) ./mlx_linux/libmlx.a -Lmlx_linux -L/usr/lib -L/usr/include -Imlx_linux -lXext -lX11 -lm -lz -o $(NAME)
-
 $(LIBFT):
 	$(MAKE) bonus -C ../libft 
 
@@ -39,6 +33,8 @@ clean:
 fclean: clean
 	rm -f $(NAME)
 	$(MAKE) fclean -C ../libft
+
+bonus: all
 
 re: fclean all
 
